@@ -1,6 +1,5 @@
 import time
 import cv2
-import os
 import HandTrackingModule as htm
 import numpy as np
 import random
@@ -103,18 +102,7 @@ if __name__ == '__main__':
                     cv2.circle(plain, center=(x, y), color=(0, 0, 0), radius=15, thickness=-1)
                     cv2.rectangle(img, (x-15, y-15), (x+15, y+15), (255, 255, 255), -1)
                     cv2.rectangle(img, (x-15, y-15), (x+15, y+15), (0, 0, 0), 1)
-                    # cv2.circle(img, center=(x, y), color=(255, 255, 0), radius=15, thickness=-1)
                     pre_dot = (0, 0, 0)
-                # if not firstOpen and not secondOpen and not thirdOpen and not fourthOpen:       # Rock
-                    # cv2.putText(img, "Rock", (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
-                # if firstOpen and secondOpen and not thirdOpen and not fourthOpen:               # Scissors
-                #     cv2.putText(img, "Scissors", (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
-                # if firstOpen and secondOpen and thirdOpen and fourthOpen:
-                #     # cv2.putText(img, "Paper", (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
-                #     plain = np.zeros((480, 640, 3), np.uint8)
-                #     if MODE3D:
-                #         plt.cla()
-                #     pre_dot = (0, 0, 0)
                 if firstOpen and fourthOpen and not secondOpen and not thirdOpen:
                     if draw_mode == 'pencil':
                         color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255))

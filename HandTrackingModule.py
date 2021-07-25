@@ -45,7 +45,6 @@ class handDetctor():
 
     # 返回列表 包含每个手指的开合状态
     def fingerStatus(self, lmList):
-
         fingerList = []
         id, originx, originy, originz = lmList[0]
         keypoint_list = [[2, 4], [6, 8], [10, 12], [14, 16], [18, 20]]
