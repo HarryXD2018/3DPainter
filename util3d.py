@@ -7,7 +7,7 @@ import numpy as np
 
 def draw_line(ax, pt1, pt2, color='blue'):
     if MODE3D:
-        print("draw line")
+        # print("draw line")
         x1, y1, z1 = pt1
         x2, y2, z2 = pt2
         ax.plot([x1, x2], [-y1, -y2], [z1, z2], color)

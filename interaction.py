@@ -1,5 +1,5 @@
 def switch_mode(cur_mode):
-    mode = ['ball', 'pencil']
+    mode = ['ball', 'brush']
     id = mode.index(cur_mode)
     # print(id)
     next_id = (id + 1) % len(mode)
@@ -8,4 +8,4 @@ def switch_mode(cur_mode):
 
 if __name__ == '__main__':
     print(switch_mode("ball"))
-    print(switch_mode("pencil"))
+    print(switch_mode("brush"))

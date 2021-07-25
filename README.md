@@ -43,7 +43,7 @@ There are four bottoms in the `image` window:
 
 **Clear**: The top right one is for clearing the plot. It will clear up both 2D and 3D results. Just as the **Switch** bottom, you can click the bottom with your mouse, or point to it with your index finger. 
 
-**Save**: `Will add at the next push`
+**Save**: Save the 2d painting work. (click only)
 
 **Exit**: The bottom right one is for exiting the program **without saving your work**. This bottom can only be activated by clicking. 
 
@@ -56,10 +56,10 @@ There are four bottoms in the `image` window:
 
 #### Activate/ deactivate 3D mode
 
-Set varable `MODE3D` in line 55 at `3DPainter.py` to `false` will deactivate the 3d mode. 
+Set varable `MODE3D` in  `3DPainter.py` to `False` will deactivate the 3d mode. 
 
 ### TODO
 
-- [ ] Save Bottom
+- [x] Save Bottom
 - [ ] Switch color in 3d mode
 - [ ] More painting modes
