@@ -102,7 +102,7 @@ if __name__ == '__main__':
                             # print(pre_dot)
                     elif draw_mode == 'ball':
                         if center != (0, 0, 0):
-                            print(center, radius)
+                            # print(center, radius)
                             cv2.circle(plain, center=center[:2], color=(0, 255, 255), radius=radius, thickness=3)
                             draw_ball(ax, center, radius)
                             center = (0, 0, 0)
