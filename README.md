@@ -22,9 +22,9 @@ You need the following Python packages:
 
 | Function     | Hand Gesture                                                 |
 | ------------ | ------------------------------------------------------------ |
-| Brush        | Index ![finger](.\demo\brush.gif) |
-| Eraser       | Index and middle finger (2d mode only)![](.\demo\eraser.gif) |
-| Switch color | Spider-man gesture (choose a color randomly, 2d mode only)![](.\demo\color.gif) |
+| Brush        | Index ![finger](https://github.com/HarryXD2018/3DPainter/blob/master/demo/brush.gif) |
+| Eraser       | Index and middle finger (2d mode only)![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/eraser.gif) |
+| Switch color | Spider-man gesture (choose a color randomly, 2d mode only)![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/color.gif) |
 
 ##### Sphere
 
@@ -35,7 +35,7 @@ You need the following Python packages:
 
 The sphere (circle) will be painted when you switch Spider-man gesture to index finger gesture. 
 
-![](.\demo\sphere.gif)
+![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/sphere.gif)
 
 #### Frameworks
 
@@ -43,11 +43,11 @@ There are four bottoms in the `image` window:
 
 **Switch**: The top left one is for switching the painter mode, you can click the bottom with your mouse, or point to it with your index finger. If you use your finger to switch, please note that the bottom will freeze for 5 seconds to make sure that your finger leave that area (to avoid swiching mode frequently). 
 
-![](.\demo\switch_mode.gif)
+![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/switch_mode.gif)
 
 **Clear**: The top right one is for clearing the plot. It will clear up both 2D and 3D results. Just as the **Switch** bottom, you can click the bottom with your mouse, or point to it with your index finger. 
 
-![](.demo\clear.gif)
+![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/clear.gif)
 
 **Save**: Save the 2d painting work. (click only)
 
