@@ -14,6 +14,12 @@ You need the following Python packages:
 
 ### Tutorials
 
+Run
+
+~~~ cmd
+python 3DPainter.py
+~~~
+
 3D Painter supports two painting modes, *brush* mode and *sphere* mode. You can choose 3D mode or only 2D mode. 
 
 #### Interactions
@@ -62,10 +68,15 @@ There are four bottoms in the `image` window:
 
 #### Activate/ deactivate 3D mode
 
-Set varable `MODE3D` in  `3DPainter.py` to `False` will deactivate the 3d mode. 
+Set variable `MODE3D` in  `3DPainter.py` to `False` will deactivate the 3d mode. 
+
+### API Introduction
+
+Please checkout repo's [wiki](https://github.com/HarryXD2018/3DPainter/wiki/Document). 
 
 ### TODO
 
 - [x] Save Bottom
 - [ ] Switch color in 3d mode
 - [ ] More painting modes
+- [ ] Save 3D results
