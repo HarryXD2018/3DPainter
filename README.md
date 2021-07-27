@@ -20,7 +20,13 @@ Run
 python 3DPainter.py
 ~~~
 
-3D Painter supports two painting modes, *brush* mode and *sphere* mode. You can choose 3D mode or only 2D mode. 
+3D Painter supports following modes:
+
+- Brush
+- Sphere (Circle)
+- Dot
+
+You can choose 3D mode or only 2D mode. 
 
 #### Interactions
 
@@ -30,7 +36,7 @@ python 3DPainter.py
 | ------------ | ------------------------------------------------------------ |
 | Brush        | Index ![finger](https://github.com/HarryXD2018/3DPainter/blob/master/demo/brush.gif) |
 | Eraser       | Index and middle finger (2d mode only)![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/eraser.gif) |
-| Switch color | Spider-man gesture (choose a color randomly, 2d mode only)![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/color.gif) |
+| Switch color | Spider-man gesture (choose a color randomly)![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/color.gif) |
 
 ##### Sphere
 
@@ -42,6 +48,10 @@ python 3DPainter.py
 The sphere (circle) will be painted when you switch Spider-man gesture to index finger gesture. 
 
 ![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/sphere.gif)
+
+##### Dot
+
+Dot function works just like sphere. 
 
 #### Frameworks
 
@@ -73,6 +83,13 @@ Set variable `MODE3D` in  `3DPainter.py` to `False` will deactivate the 3d mode.
 ### API Introduction
 
 Please checkout repo's [wiki](https://github.com/HarryXD2018/3DPainter/wiki/Document). 
+
+### New Features
+
+[2021/07/27]
+
+- Add dot function
+- Synchronize the brush color in 2d and 3d display window
 
 ### TODO
 

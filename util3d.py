@@ -5,12 +5,12 @@ import cv2
 import numpy as np
 
 
-def draw_line(ax, pt1, pt2, color='blue'):
+def draw_line(ax, pt1, pt2, color):
     if MODE3D:
         # print("draw line")
         x1, y1, z1 = pt1
         x2, y2, z2 = pt2
-        ax.plot([x1, x2], [-y1, -y2], [z1, z2], color)
+        ax.plot([x1, x2], [-y1, -y2], [z1, z2], color=(color[2]/255, color[1]/255, color[0]/255))
 
 
 def draw_ball(ax, center, radius, color='Reds'):
@@ -23,6 +23,10 @@ def draw_ball(ax, center, radius, color='Reds'):
         z = radius * np.cos(s) + center[2]
         # ax = plt.subplot(111, projection='3d')
         ax.plot_surface(x, y, z, rstride=1, cstride=1, cmap=color)
+
+
+def draw_dot(ax, x, y, z):
+    ax.scatter(x, -y, z, color=(0, 1, 0.14))
 
 
 def runtime_init():
@@ -45,9 +49,10 @@ if __name__ == '__main__':
     fig = plt.figure(figsize=(5, 5))
     ax = fig.add_subplot(111, projection='3d')
     # draw_line(ax, (10, 10, 10), (20, 20, 20))
-    draw_ball(ax, (100, 100, 100), 5)
-    # draw_line(ax, (0, 0, 0), (10, 10, 10))
-    draw_ball(ax, (10, 5, 5), 5)
+    # draw_ball(ax, (100, 100, 100), 5)
+    # # draw_line(ax, (0, 0, 0), (10, 10, 10))
+    # draw_ball(ax, (10, 5, 5), 5)
+    draw_dot(ax, 1, 2, 3)
     plt.show()
     # plt.ioff()
 

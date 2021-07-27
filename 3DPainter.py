@@ -3,7 +3,7 @@ import cv2
 import HandTrackingModule as htm
 import numpy as np
 import random
-from util3d import runtime_init, draw_line, MODE3D, draw_ball
+from util3d import runtime_init, draw_line, MODE3D, draw_ball, draw_dot
 from interaction import switch_mode
 
 import matplotlib.pyplot as plt
@@ -95,11 +95,10 @@ if __name__ == '__main__':
                     elif draw_mode == 'brush':
                         if pre_dot != (0, 0, 0):
                             cv2.line(plain, (x, y), pre_dot[:2], color, 3)
-                            draw_line(ax, (x, y, z), pre_dot)
-                            f.write("{} {} {}\n".format(x, y, z))
+                            draw_line(ax, (x, y, z), pre_dot, color=color)
+                            # f.write("{} {} {}\n".format(x, y, z))
                         pre_dot = (x, y, z)
-                        # if random.random() > 0.5:
-                            # print(pre_dot)
+
                     elif draw_mode == 'ball':
                         if center != (0, 0, 0):
                             # print(center, radius)
@@ -108,20 +107,29 @@ if __name__ == '__main__':
                             center = (0, 0, 0)
                             radius = 5
 
+                    elif draw_mode == 'dot':
+                        pre_dot = (x, y, z)
+
                 if firstOpen and secondOpen and not thirdOpen and not fourthOpen:
                     _, x, y, z = lmList[8]
-                    cv2.circle(plain, center=(x, y), color=(0, 0, 0), radius=15, thickness=-1)
+                    cv2.rectangle(plain, (x-15, y-15), (x+15, y+15), (0, 0, 0), -1)
                     cv2.rectangle(img, (x-15, y-15), (x+15, y+15), (255, 255, 255), -1)
                     cv2.rectangle(img, (x-15, y-15), (x+15, y+15), (0, 0, 0), 1)
                     pre_dot = (0, 0, 0)
                 if firstOpen and fourthOpen and not secondOpen and not thirdOpen:
                     if draw_mode == 'brush':
                         color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255))
+
                     elif draw_mode == 'ball':
                         center = (x, y, z)
                         cv2.circle(img, center=center[:2], color=(0, 200, 200), radius=radius, thickness=3)
                         if int(time.time()) % 2 == 0:
                             radius += 5
+
+                    elif draw_mode == 'dot':
+                        cv2.circle(plain, center=pre_dot[:2], color=(0, 255, 35), radius=2, thickness=-1)
+                        draw_dot(ax, pre_dot[0], pre_dot[1], pre_dot[2])
+
                 if not firstOpen:
                     pre_dot = (0, 0, 0)
                     center = (0, 0, 0)
