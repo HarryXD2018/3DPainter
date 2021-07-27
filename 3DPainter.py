@@ -45,7 +45,7 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
 
 def save_photo():
     now = datetime.datetime.now()
-    cv2.imwrite("Image{}.jpg".format(now.strftime("%Y%m%d%H%M%S")), result)
+    cv2.imwrite("./output/Image{}.jpg".format(now.strftime("%Y%m%d%H%M%S")), result)
 
 
 wCam, hCam = 640, 480
