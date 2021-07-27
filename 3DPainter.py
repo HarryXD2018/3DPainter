@@ -3,7 +3,7 @@ import cv2
 import HandTrackingModule as htm
 import numpy as np
 import random
-from util3d import runtime_init, draw_line, MODE3D, draw_ball, draw_dot
+from util3d import runtime_init, draw_line, MODE3D, draw_ball, draw_dot, draw_cuboid
 from interaction import switch_mode
 
 import matplotlib.pyplot as plt
@@ -120,15 +120,21 @@ if __name__ == '__main__':
                         if begin_dot != (0, 0, 0):
                             cv2.line(img, (x, y), begin_dot[:2], (205, 0, 255), 3)
 
+                    elif draw_mode == 'cuboid':
+                        if begin_dot != (0, 0, 0):
+                            cv2.rectangle(img, (x, y), begin_dot[:2], (245, 255, 79), 3)
+
                     elif draw_mode == 'dot':
                         pre_dot = (x, y, z)
 
+                # Eraser
                 if firstOpen and secondOpen and not thirdOpen and not fourthOpen:
                     _, x, y, z = lmList[8]
                     cv2.rectangle(plain, (x-15, y-15), (x+15, y+15), (0, 0, 0), -1)
                     cv2.rectangle(img, (x-15, y-15), (x+15, y+15), (255, 255, 255), -1)
                     cv2.rectangle(img, (x-15, y-15), (x+15, y+15), (0, 0, 0), 1)
                     pre_dot = (0, 0, 0)
+
                 if firstOpen and fourthOpen and not secondOpen and not thirdOpen:
                     if draw_mode == 'brush':
                         color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255))
@@ -150,6 +156,17 @@ if __name__ == '__main__':
                         elif abs(begin_dot[0] - x) + abs(begin_dot[1] - y) > 20:
                             cv2.line(plain, (x, y), begin_dot[:2], (205, 0, 255), 3)
                             draw_line(ax, (x, y, z), begin_dot, (205, 0, 255))
+                            begin_dot = (0, 0, 0)
+                            line_timestamp = time.time()
+
+                    elif draw_mode == 'cuboid':
+                        if begin_dot == (0, 0, 0):
+                            if time.time()-line_timestamp > 2:
+                                begin_dot = (x, y, z)
+                        elif abs(begin_dot[0] - x) + abs(begin_dot[1] - y) > 20:
+                            cv2.rectangle(plain, (x, y), begin_dot[:2], (245, 255, 79), 3)
+                            draw_cuboid(ax, (x, y, z), begin_dot, (245, 255, 79))
+                            # draw_line(ax, (x, y, z), begin_dot, (205, 0, 255))
                             begin_dot = (0, 0, 0)
                             line_timestamp = time.time()
                 if not firstOpen:

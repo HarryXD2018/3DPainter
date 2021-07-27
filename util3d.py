@@ -30,7 +30,23 @@ def draw_ball(ax, center, radius, color='Reds'):
 
 
 def draw_dot(ax, x, y, z):
-    ax.scatter(x, -y, z, color=(0, 1, 0.14))
+    if MODE3D:
+        ax.scatter(x, -y, z, color=(0, 1, 0.14))
+
+
+def draw_cuboid(ax, pt1, pt2, color=(245, 255, 79)):
+    xx = np.linspace(pt1[0], pt2[0], 2)
+    yy = np.linspace(-pt1[1], -pt2[1], 2)
+    zz = np.linspace(pt1[2], pt2[2], 2)
+    xx2, yy2 = np.meshgrid(xx, yy)
+    ax.plot_surface(xx2, yy2, np.full_like(xx2, pt1[2]), color=bgr2plt(color))
+    ax.plot_surface(xx2, yy2, np.full_like(xx2, pt2[2]), color=bgr2plt(color))
+    yy2, zz2 = np.meshgrid(yy, zz)
+    ax.plot_surface(np.full_like(yy2, pt1[0]), yy2, zz2, color=bgr2plt(color))
+    ax.plot_surface(np.full_like(yy2, pt2[0]), yy2, zz2, color=bgr2plt(color))
+    xx2, zz2= np.meshgrid(xx, zz)
+    ax.plot_surface(xx2, np.full_like(yy2, -pt1[1]), zz2, color=bgr2plt(color))
+    ax.plot_surface(xx2, np.full_like(yy2, -pt2[1]), zz2, color=bgr2plt(color))
 
 
 def runtime_init():
@@ -56,7 +72,8 @@ if __name__ == '__main__':
     # draw_ball(ax, (100, 100, 100), 5)
     # # draw_line(ax, (0, 0, 0), (10, 10, 10))
     # draw_ball(ax, (10, 5, 5), 5)
-    draw_dot(ax, 1, 2, 3)
+    # draw_dot(ax, 1, 2, 3)
+    draw_cuboid(ax, (0, 0, 0), (2, 3, 3))
     plt.show()
     # plt.ioff()
 

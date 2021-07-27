@@ -25,6 +25,7 @@ python 3DPainter.py
 - Brush
 - Sphere (Circle)
 - Dot
+- Cuboid
 
 You can choose 3D mode or only 2D mode. 
 
@@ -56,6 +57,10 @@ Dot function works just like sphere.
 ##### Line 
 
 Spider-man gesture to determine the location of each end of the line. Please wait for 2 seconds between ploting 2 lines. 
+
+##### Cuboid
+
+Similar to line. Two points are recorded as diagonal points. 
 
 #### Frameworks
 
@@ -92,12 +97,13 @@ Please checkout repo's [wiki](https://github.com/HarryXD2018/3DPainter/wiki/Docu
 
 [2021/07/27]
 
-- Add dot and line mode. 
+- Add dot, line and cuboid mode. 
 - Synchronize the brush color in 2d and 3d display window
 
 ### TODO
 
 - [x] Save Bottom
-- [ ] Switch color in 3d mode
-- [ ] More painting modes
-- [ ] Save 3D results
+- [x] Switch color in 3d mode
+- [x] More painting modes
+- [ ] Usage demo
+- [ ] Save 3d results
