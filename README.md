@@ -53,6 +53,10 @@ The sphere (circle) will be painted when you switch Spider-man gesture to index 
 
 Dot function works just like sphere. 
 
+##### Line 
+
+Spider-man gesture to determine the location of each end of the line. Please wait for 2 seconds between ploting 2 lines. 
+
 #### Frameworks
 
 There are four bottoms in the `image` window:
@@ -88,7 +92,7 @@ Please checkout repo's [wiki](https://github.com/HarryXD2018/3DPainter/wiki/Docu
 
 [2021/07/27]
 
-- Add dot function
+- Add dot and line mode. 
 - Synchronize the brush color in 2d and 3d display window
 
 ### TODO

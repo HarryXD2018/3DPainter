@@ -55,17 +55,26 @@ cap.set(4, hCam)
 
 
 if __name__ == '__main__':
+    # Display function init
     plain = np.zeros((480, 640, 3), np.uint8)
     panel = np.zeros((480, 640, 3), np.uint8)
+    ax = runtime_init()
+
+    # painting init
     pre_dot = (0, 0, 0)
+    begin_dot = (0, 0, 0)
     center = (0, 0, 0)
     color = (255, 255, 0)
-    detector = htm.handDetctor(detectionCon=0.7)
-    ax = runtime_init()
-    draw_mode = 'brush'
+    draw_mode = 'line'
     MODE3D = True
     switch_timestamp = 0
+    line_timestamp = 0
     radius = 5
+
+    # hand detectors
+    detector = htm.handDetctor(detectionCon=0.7)
+
+
     with open('trace.txt', 'w') as f:
         while True:
             success, img = cap.read()
@@ -107,6 +116,10 @@ if __name__ == '__main__':
                             center = (0, 0, 0)
                             radius = 5
 
+                    elif draw_mode == 'line':
+                        if begin_dot != (0, 0, 0):
+                            cv2.line(img, (x, y), begin_dot[:2], (205, 0, 255), 3)
+
                     elif draw_mode == 'dot':
                         pre_dot = (x, y, z)
 
@@ -130,6 +143,15 @@ if __name__ == '__main__':
                         cv2.circle(plain, center=pre_dot[:2], color=(0, 255, 35), radius=2, thickness=-1)
                         draw_dot(ax, pre_dot[0], pre_dot[1], pre_dot[2])
 
+                    elif draw_mode == 'line':
+                        if begin_dot == (0, 0, 0):
+                            if time.time()-line_timestamp > 2:
+                                begin_dot = (x, y, z)
+                        elif abs(begin_dot[0] - x) + abs(begin_dot[1] - y) > 20:
+                            cv2.line(plain, (x, y), begin_dot[:2], (205, 0, 255), 3)
+                            draw_line(ax, (x, y, z), begin_dot, (205, 0, 255))
+                            begin_dot = (0, 0, 0)
+                            line_timestamp = time.time()
                 if not firstOpen:
                     pre_dot = (0, 0, 0)
                     center = (0, 0, 0)
