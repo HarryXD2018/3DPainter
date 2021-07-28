@@ -5,6 +5,7 @@ import numpy as np
 import random
 from util3d import runtime_init, draw_line, MODE3D, draw_ball, draw_dot, draw_cuboid
 from interaction import switch_mode
+from gen3d import gen3d
 
 import matplotlib.pyplot as plt
 
@@ -37,6 +38,9 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
         elif x < 120 and y < 40:
             draw_mode = switch_mode(draw_mode)
         elif x > 520 and y > 440:
+            f.close()
+            if GEN3D:
+                gen3d()
             exit()
         elif x < 120 and y > 440:
             save_photo()
@@ -65,15 +69,15 @@ if __name__ == '__main__':
     begin_dot = (0, 0, 0)
     center = (0, 0, 0)
     color = (255, 255, 0)
-    draw_mode = 'line'
+    draw_mode = 'brush'
     MODE3D = True
+    GEN3D = True
     switch_timestamp = 0
     line_timestamp = 0
     radius = 5
 
     # hand detectors
     detector = htm.handDetctor(detectionCon=0.7)
-
 
     with open('trace.txt', 'w') as f:
         while True:
@@ -105,7 +109,7 @@ if __name__ == '__main__':
                         if pre_dot != (0, 0, 0):
                             cv2.line(plain, (x, y), pre_dot[:2], color, 3)
                             draw_line(ax, (x, y, z), pre_dot, color=color)
-                            # f.write("{} {} {}\n".format(x, y, z))
+                            f.write("b {} {} {}\n".format(x, y, z))
                         pre_dot = (x, y, z)
 
                     elif draw_mode == 'ball':
@@ -113,6 +117,7 @@ if __name__ == '__main__':
                             # print(center, radius)
                             cv2.circle(plain, center=center[:2], color=(0, 255, 255), radius=radius, thickness=3)
                             draw_ball(ax, center, radius)
+                            f.write("s {} {} {} {}\n".format(center[0], center[1], center[2], radius))
                             center = (0, 0, 0)
                             radius = 5
 
@@ -148,6 +153,7 @@ if __name__ == '__main__':
                     elif draw_mode == 'dot':
                         cv2.circle(plain, center=pre_dot[:2], color=(0, 255, 35), radius=2, thickness=-1)
                         draw_dot(ax, pre_dot[0], pre_dot[1], pre_dot[2])
+                        f.write("d {} {} {}\n".format(pre_dot[0], pre_dot[1], pre_dot[2]))
 
                     elif draw_mode == 'line':
                         if begin_dot == (0, 0, 0):
@@ -156,6 +162,7 @@ if __name__ == '__main__':
                         elif abs(begin_dot[0] - x) + abs(begin_dot[1] - y) > 20:
                             cv2.line(plain, (x, y), begin_dot[:2], (205, 0, 255), 3)
                             draw_line(ax, (x, y, z), begin_dot, (205, 0, 255))
+                            f.write("l {} {} {} {} {} {}\n".format(x, y, z, begin_dot[0], begin_dot[1], begin_dot[2]))
                             begin_dot = (0, 0, 0)
                             line_timestamp = time.time()
 
@@ -166,7 +173,7 @@ if __name__ == '__main__':
                         elif abs(begin_dot[0] - x) + abs(begin_dot[1] - y) > 20:
                             cv2.rectangle(plain, (x, y), begin_dot[:2], (245, 255, 79), 3)
                             draw_cuboid(ax, (x, y, z), begin_dot, (245, 255, 79))
-                            # draw_line(ax, (x, y, z), begin_dot, (205, 0, 255))
+                            f.write("c {} {} {} {} {} {}\n".format(x, y, z, begin_dot[0], begin_dot[1], begin_dot[2]))
                             begin_dot = (0, 0, 0)
                             line_timestamp = time.time()
                 if not firstOpen:

@@ -9,6 +9,9 @@ You need the following Python packages:
 - matplotlib
 - opencv-python
 - mediapipe
+- open3d-python
+
+Or run `pip install -r requirements.txt` in your command line. 
 
 *Please note that you need to download [hand landmark](https://github.com/google/mediapipe/tree/master/mediapipe/modules/hand_landmark) model that suits your PC and put it at the root folder.*
 
@@ -74,9 +77,9 @@ There are four bottoms in the `image` window:
 
 ![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/clear.gif)
 
-**Save**: Save the 2d painting work. (click only)
+**Save**: Save the `jpg` file of the current window. 
 
-**Exit**: The bottom right one is for exiting the program **without saving your work**. This bottom can only be activated by clicking. 
+**Exit**: The bottom right one is for exiting the program **without saving your work**. This bottom can only be activated by clicking. The final 3d `ply` file will be saved if variable `GEN3D` is `True`. 
 
 | Interaction | Mouse clicking     | Finger Pointing    |
 | ----------- | ------------------ | ------------------ |
@@ -87,7 +90,13 @@ There are four bottoms in the `image` window:
 
 #### Activate/ deactivate 3D mode
 
-Set variable `MODE3D` in  `3DPainter.py` to `False` will deactivate the 3d mode. 
+Set variable `MODE3D` in  `3DPainter.py` to `False` will deactivate the syn 3d mode. 
+
+#### Generate and View the ply File
+
+Set variable `GEN3D` in  `3DPainter.py` to `True` will generate the 3d file in `ply` format. You can view the file by running `view3d.py`. (Please change the file name)
+
+![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/3dresult.png)
 
 ### API Introduction
 
@@ -100,10 +109,14 @@ Please checkout repo's [wiki](https://github.com/HarryXD2018/3DPainter/wiki/Docu
 - Add dot, line and cuboid mode. 
 - Synchronize the brush color in 2d and 3d display window
 
+[2021/07/28]
+
+- I just add the 3d point cloud function, you can now output the result in `.ply` file!
+
 ### TODO
 
 - [x] Save Bottom
 - [x] Switch color in 3d mode
 - [x] More painting modes
 - [ ] Usage demo
-- [ ] Save 3d results
+- [x] Save 3d results
