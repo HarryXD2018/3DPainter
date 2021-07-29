@@ -6,9 +6,6 @@ import datetime
 import random
 
 
-Signature = "Harry Chen"
-
-
 def pc_cube(pt1, pt2):
     # print(len(pt1), len(pt2))
     x = np.linspace(pt1[0], pt2[0])
@@ -57,9 +54,9 @@ def pc_sphere(center, radius):
     return np.c_[x.ravel(), y.ravel(), z.ravel()]
 
 
-def pc_text(pt1):
+def pc_text(pt1, text: str):
     img = np.ones((480, 640, 3), np.uint8)
-    cv2.putText(img, "Harry Chen", (pt1[0], pt1[1]), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 1)
+    cv2.putText(img, text, (pt1[0], pt1[1]), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 1)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     x, y = np.where(gray == 0)
     black = np.c_[y, x]
@@ -78,7 +75,10 @@ def gen3d():
     with open('trace.txt') as f:
         for index, line in enumerate(f):
             info = line.strip().split(' ')
-            nums = list(map(int, info[1:]))
+            try:
+                nums = list(map(int, info[1:]))
+            except ValueError:
+                nums = list(map(int, info[1:4]))
             if info[0] == "c":          # cuboid
                 points = np.concatenate((points, pc_cube(nums[:3], nums[3:])))
                 brush_temp = None
@@ -96,7 +96,11 @@ def gen3d():
                     points = np.concatenate((points, pc_line(nums, brush_temp)))
                 brush_temp = nums
             elif info[0] == "t":
-                points = np.concatenate((points, pc_text(nums)))
+                if len(info) == 5:
+                    points = np.concatenate((points, pc_text(nums, info[-1])))
+                else:
+                    text = " ".join(info[i] for i in range(4, len(info)))
+                    points = np.concatenate((points, pc_text(nums, text)))
     points = np.delete(points, 0, axis=0)
     point_cloud = PointCloud()
     point_cloud.points = Vector3dVector(points)

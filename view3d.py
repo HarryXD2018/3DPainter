@@ -1,5 +1,5 @@
 import open3d as o3d
-pcd = o3d.io.read_point_cloud("./output/20210729112104.ply")
+pcd = o3d.io.read_point_cloud("./output/20210729204304.ply")
 vis = o3d.visualization.Visualizer()
 vis.create_window()
 

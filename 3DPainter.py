@@ -5,7 +5,7 @@ import numpy as np
 import random
 from util3d import runtime_init, draw_line, MODE3D, draw_ball, draw_dot, draw_cuboid
 from interaction import switch_mode
-from gen3d import gen3d, Signature
+from gen3d import gen3d
 
 import matplotlib.pyplot as plt
 
@@ -70,6 +70,7 @@ if __name__ == '__main__':
     center = (0, 0, 0)
     color = (255, 255, 0)
     draw_mode = 'text'
+    Signature = input("Please add your signature: ")
     MODE3D = True
     GEN3D = True
     switch_timestamp = 0
@@ -180,7 +181,7 @@ if __name__ == '__main__':
                     elif draw_mode == 'text':
                         if time.time()-text_timestamp > 2:
                             cv2.putText(plain, Signature, (x, y), cv2.FONT_HERSHEY_PLAIN, 3, (102, 248, 255), 1)
-                            f.write("t {} {} {}\n".format(x, y, z))
+                            f.write("t {} {} {} {}\n".format(x, y, z, Signature))
                             text_timestamp = time.time()
                 if not firstOpen:
                     pre_dot = (0, 0, 0)
