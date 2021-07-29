@@ -1,8 +1,12 @@
-import os
+import cv2
 import numpy as np
 from open3d import PointCloud, Vector3dVector, draw_geometries
 import open3d as o3d
 import datetime
+import random
+
+
+Signature = "Harry Chen"
 
 
 def pc_cube(pt1, pt2):
@@ -53,6 +57,21 @@ def pc_sphere(center, radius):
     return np.c_[x.ravel(), y.ravel(), z.ravel()]
 
 
+def pc_text(pt1):
+    img = np.ones((480, 640, 3), np.uint8)
+    cv2.putText(img, "Harry Chen", (pt1[0], pt1[1]), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 1)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    x, y = np.where(gray == 0)
+    black = np.c_[y, x]
+    points = np.zeros((1, 3))
+    for i in range(10):
+        selected_index = random.sample(range(len(black)), random.randint(int(len(black)/3), int(2*len(black)/3)))
+        for j in selected_index:
+            temp = np.append(black[j], i).reshape(1, 3)
+            points = np.concatenate((points, temp))
+    return np.delete(points, 0, axis=0)
+
+
 def gen3d():
     points = np.zeros((1, 3))
     brush_temp = None
@@ -73,10 +92,11 @@ def gen3d():
                 points = np.concatenate((points, pc_line(nums[:3], nums[3:])))
                 brush_temp = None
             elif info[0] == "b":
-                pass
                 if brush_temp is not None:
                     points = np.concatenate((points, pc_line(nums, brush_temp)))
                 brush_temp = nums
+            elif info[0] == "t":
+                points = np.concatenate((points, pc_text(nums)))
     points = np.delete(points, 0, axis=0)
     point_cloud = PointCloud()
     point_cloud.points = Vector3dVector(points)

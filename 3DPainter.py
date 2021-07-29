@@ -5,7 +5,7 @@ import numpy as np
 import random
 from util3d import runtime_init, draw_line, MODE3D, draw_ball, draw_dot, draw_cuboid
 from interaction import switch_mode
-from gen3d import gen3d
+from gen3d import gen3d, Signature
 
 import matplotlib.pyplot as plt
 
@@ -69,10 +69,11 @@ if __name__ == '__main__':
     begin_dot = (0, 0, 0)
     center = (0, 0, 0)
     color = (255, 255, 0)
-    draw_mode = 'brush'
+    draw_mode = 'text'
     MODE3D = True
     GEN3D = True
     switch_timestamp = 0
+    text_timestamp = 0
     line_timestamp = 0
     radius = 5
 
@@ -176,6 +177,11 @@ if __name__ == '__main__':
                             f.write("c {} {} {} {} {} {}\n".format(x, y, z, begin_dot[0], begin_dot[1], begin_dot[2]))
                             begin_dot = (0, 0, 0)
                             line_timestamp = time.time()
+                    elif draw_mode == 'text':
+                        if time.time()-text_timestamp > 2:
+                            cv2.putText(plain, Signature, (x, y), cv2.FONT_HERSHEY_PLAIN, 3, (102, 248, 255), 1)
+                            f.write("t {} {} {}\n".format(x, y, z))
+                            text_timestamp = time.time()
                 if not firstOpen:
                     pre_dot = (0, 0, 0)
                     center = (0, 0, 0)

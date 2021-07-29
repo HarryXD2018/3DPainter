@@ -1,5 +1,5 @@
 def switch_mode(cur_mode):
-    mode = ['brush', 'ball', 'dot', 'line', 'cuboid']
+    mode = ['brush', 'ball', 'dot', 'line', 'cuboid', 'text']
     id = mode.index(cur_mode)
     # print(id)
     next_id = (id + 1) % len(mode)

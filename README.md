@@ -65,6 +65,12 @@ Spider-man gesture to determine the location of each end of the line. Please wai
 
 Similar to line. Two points are recorded as diagonal points. 
 
+##### Text (Signature)
+
+You can add your signature with spider-man gesture in text mode. Please change the `Signature`in `3DPointer.py`. 
+
+![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/Signature.png)
+
 #### Frameworks
 
 There are four bottoms in the `image` window:
@@ -112,6 +118,10 @@ Please checkout repo's [wiki](https://github.com/HarryXD2018/3DPainter/wiki/Docu
 [2021/07/28]
 
 - I just add the 3d point cloud function, you can now output the result in `.ply` file!
+
+[2021/07/29]
+
+- You can add your signature in text mode!
 
 ### TODO
 
