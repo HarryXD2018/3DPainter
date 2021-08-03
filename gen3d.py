@@ -4,10 +4,10 @@ from open3d import PointCloud, Vector3dVector, draw_geometries
 import open3d as o3d
 import datetime
 import random
+from interaction import opt
 
 
 def pc_cube(pt1, pt2):
-    # print(len(pt1), len(pt2))
     x = np.linspace(pt1[0], pt2[0])
     y = np.linspace(pt1[1], pt2[1])
     z = np.linspace(pt1[2], pt2[2])
@@ -35,7 +35,6 @@ def pc_cube(pt1, pt2):
 
 
 def pc_line(pt1, pt2):
-    # print(len(pt1), len(pt2))
     alpha = 5 * int(np.linalg.norm(np.asarray(pt1)-np.asarray(pt2)))
     x = np.linspace(pt1[0], pt2[0], alpha)
     y = np.linspace(pt1[1], pt2[1], alpha)
@@ -44,7 +43,6 @@ def pc_line(pt1, pt2):
 
 
 def pc_sphere(center, radius):
-    # print(len(center))
     t = np.linspace(0, np.pi * 2, 100)
     s = np.linspace(0, np.pi, 100)
     t, s = np.meshgrid(t, s)
@@ -101,12 +99,16 @@ def gen3d():
                 else:
                     text = " ".join(info[i] for i in range(4, len(info)))
                     points = np.concatenate((points, pc_text(nums, text)))
+            elif info[0] == 'clear':
+                points = np.ones((1, 3))
     points = np.delete(points, 0, axis=0)
     point_cloud = PointCloud()
     point_cloud.points = Vector3dVector(points)
     now = datetime.datetime.now()
-    o3d.io.write_point_cloud('output/{}.ply'.format(now.strftime("%Y%m%d%H%M%S")), point_cloud, True)
-    draw_geometries([point_cloud])
+    if opt.export3d:
+        o3d.io.write_point_cloud('output/{}.ply'.format(now.strftime("%Y%m%d%H%M%S")), point_cloud, True)
+    if opt.view3d:
+        draw_geometries([point_cloud])
 
 
 if __name__ == '__main__':

@@ -95,13 +95,13 @@ There are four bottoms in the `image` window:
 | Save        | :heavy_check_mark: | :x:                |
 | Exit        | :heavy_check_mark: | :x:                |
 
-#### Activate/ deactivate 3D mode
+#### Display options
+There are 3 boolean variables: `opt.preview3d`, `opt.view3d` and `opt.export3d` namely. They respectively in charge of:
+- matplotlib 3d preview while running the program,
+- the point cloud result after running,
+- if the point cloud result export to `ply` file. 
 
-Set variable `MODE3D` in  `3DPainter.py` to `False` will deactivate the syn 3d mode. 
-
-#### Generate and View the ply File
-
-Set variable `GEN3D` in  `3DPainter.py` to `True` will generate the 3d file in `ply` format. You can view the file by running `view3d.py`. (Please change the file name)
+You can view the file by running `view3d.py`. (Please change the file name)
 
 ![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/3dresult.png)
 

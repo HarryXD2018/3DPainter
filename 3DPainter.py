@@ -3,8 +3,8 @@ import cv2
 import HandTrackingModule as htm
 import numpy as np
 import random
-from util3d import runtime_init, draw_line, MODE3D, draw_ball, draw_dot, draw_cuboid
-from interaction import switch_mode
+from util3d import runtime_init, draw_line, draw_ball, draw_dot, draw_cuboid
+from interaction import switch_mode, opt
 from gen3d import gen3d
 
 import matplotlib.pyplot as plt
@@ -33,13 +33,14 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
         if x > 520 and y < 40:
             plain = np.zeros((480, 640, 3), np.uint8)
             plt.cla()
+            f.write("clear\n")
             pre_dot = (0, 0, 0)
             center = (0, 0, 0)
         elif x < 120 and y < 40:
             draw_mode = switch_mode(draw_mode)
         elif x > 520 and y > 440:
             f.close()
-            if GEN3D:
+            if opt.export3d or opt.view3d:
                 gen3d()
             exit()
         elif x < 120 and y > 440:
@@ -70,9 +71,7 @@ if __name__ == '__main__':
     center = (0, 0, 0)
     color = (255, 255, 0)
     draw_mode = 'text'
-    Signature = input("Please add your signature: ")
-    MODE3D = True
-    GEN3D = True
+    Signature = "H.Chen"
     switch_timestamp = 0
     text_timestamp = 0
     line_timestamp = 0
@@ -80,6 +79,11 @@ if __name__ == '__main__':
 
     # hand detectors
     detector = htm.handDetctor(detectionCon=0.7)
+
+    """
+    opt.view3d = False
+    opt.export3d = False
+    """
 
     with open('trace.txt', 'w') as f:
         while True:
@@ -116,7 +120,6 @@ if __name__ == '__main__':
 
                     elif draw_mode == 'ball':
                         if center != (0, 0, 0):
-                            # print(center, radius)
                             cv2.circle(plain, center=center[:2], color=(0, 255, 255), radius=radius, thickness=3)
                             draw_ball(ax, center, radius)
                             f.write("s {} {} {} {}\n".format(center[0], center[1], center[2], radius))
@@ -194,7 +197,7 @@ if __name__ == '__main__':
             display = cv2.add(img1_bg, panel)
             cv2.imshow("image", display)
             cv2.setMouseCallback("image", on_EVENT_LBUTTONDOWN)
-            if MODE3D:
+            if opt.preview3d:
                 plt.pause(0.1)
             if cv2.waitKey(2) & 0xFF == 27:
                 plt.ioff()

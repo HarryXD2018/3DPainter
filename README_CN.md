@@ -67,7 +67,7 @@
 
 ![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/switch_mode.gif)
 
-**清空屏幕**：右上角的按键可以清空实时画布上的所有内容。（目前并不会清除导出三维文件中）
+**清空屏幕**：右上角的按键可以清空画布上的所有内容。
 
 ![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/clear.gif)
 

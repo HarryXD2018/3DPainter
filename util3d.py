@@ -3,6 +3,7 @@ import time
 from mpl_toolkits.mplot3d import Axes3D
 import cv2
 import numpy as np
+from interaction import opt
 
 
 def bgr2plt(color):
@@ -10,7 +11,7 @@ def bgr2plt(color):
 
 
 def draw_line(ax, pt1, pt2, color):
-    if MODE3D:
+    if opt.preview3d:
         # print("draw line")
         x1, y1, z1 = pt1
         x2, y2, z2 = pt2
@@ -18,7 +19,7 @@ def draw_line(ax, pt1, pt2, color):
 
 
 def draw_ball(ax, center, radius, color='Reds'):
-    if MODE3D:
+    if opt.preview3d:
         t = np.linspace(0, np.pi * 2, 100)
         s = np.linspace(0, np.pi, 100)
         t, s = np.meshgrid(t, s)
@@ -30,12 +31,12 @@ def draw_ball(ax, center, radius, color='Reds'):
 
 
 def draw_dot(ax, x, y, z):
-    if MODE3D:
+    if opt.preview3d:
         ax.scatter(x, -y, z, color=(0, 1, 0.14))
 
 
 def draw_cuboid(ax, pt1, pt2, color=(245, 255, 79)):
-    if MODE3D:
+    if opt.preview3d:
         xx = np.linspace(pt1[0], pt2[0], 2)
         yy = np.linspace(-pt1[1], -pt2[1], 2)
         zz = np.linspace(pt1[2], pt2[2], 2)
@@ -51,18 +52,14 @@ def draw_cuboid(ax, pt1, pt2, color=(245, 255, 79)):
 
 
 def runtime_init():
-    # plt.ion()
-    fig = plt.figure(figsize=(6, 6))
-    ax = fig.add_subplot(111, projection='3d')
-    ax.set_xlabel('x axis') #x轴名称
-    ax.set_ylabel('y axis') #y轴名称
-    ax.set_zlabel('z axis')
-    ax.view_init(elev=85, azim=-87)
-# ax.axis('equal')
-    return ax
-
-
-MODE3D = True
+    if opt.preview3d:
+        fig = plt.figure(figsize=(6, 6))
+        ax = fig.add_subplot(111, projection='3d')
+        ax.set_xlabel('x axis') #x轴名称
+        ax.set_ylabel('y axis') #y轴名称
+        ax.set_zlabel('z axis')
+        ax.view_init(elev=85, azim=-87)
+        return ax
 
 
 if __name__ == '__main__':
