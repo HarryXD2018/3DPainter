@@ -1,6 +1,8 @@
 # 3D Painter
 
-A monocular 3D Painter based on Python. 
+[简体中文](https://github.com/HarryXD2018/3DPainter/blob/master/README_CN.md)
+
+A monocular 3D Painter based on Python, which can export as `ply` file. 
 
 ### Installation
 
@@ -30,9 +32,8 @@ python 3DPainter.py
 - Dot
 - Cuboid
 
-You can choose 3D mode or only 2D mode. 
-
 #### Interactions
+While running the program, there will be 2 windows on the screen, 2d and 3d respectively. The 3d window is powered by `matplotlib` and it is only a 3d preview of the project. The final result is generated after exiting the program. 
 
 ##### Brush
 
@@ -67,7 +68,7 @@ Similar to line. Two points are recorded as diagonal points.
 
 ##### Text (Signature)
 
-You can add your signature with spider-man gesture in text mode. Please change the `Signature`in `3DPointer.py`. 
+You can add your signature with spider-man gesture in text mode. Signature will be asked at the beginning of execution.
 
 ![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/Signature.png)
 

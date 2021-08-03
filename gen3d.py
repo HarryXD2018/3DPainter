@@ -104,9 +104,9 @@ def gen3d():
     points = np.delete(points, 0, axis=0)
     point_cloud = PointCloud()
     point_cloud.points = Vector3dVector(points)
-    # draw_geometries([point_cloud])
     now = datetime.datetime.now()
     o3d.io.write_point_cloud('output/{}.ply'.format(now.strftime("%Y%m%d%H%M%S")), point_cloud, True)
+    draw_geometries([point_cloud])
 
 
 if __name__ == '__main__':
