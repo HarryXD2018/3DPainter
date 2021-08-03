@@ -20,7 +20,7 @@
 - 长方形/长方体
 
 #### 交互
-在程序运行期间，屏幕上会显示两个窗口，分别显示实时的二维和三维画面。实时的三维画面是基于`matplotlib`，而最终导出的三维文件是程序结束后生成的。为了提高实时性能，您可以将实时三维画面[关闭](https://github.com/HarryXD2018/3DPainter/wiki/Document#util3dpy)。
+在程序运行期间，屏幕上会显示两个窗口，分别显示实时的二维和三维画面。实时的三维画面是基于`matplotlib`，而最终导出的三维文件是程序结束后生成的。为了提高实时性能，您可以将实时三维画面[关闭](https://github.com/HarryXD2018/3DPainter/wiki/Document#interactionpy)。
 
 ##### 画笔
 
@@ -84,7 +84,7 @@
 
 #### 导出与查看
 
-程序会默认导出`ply`文件，同样您也可以[关闭](https://github.com/HarryXD2018/3DPainter/wiki/Document#gen3dpy)自动导出功能。通过运行`view3d.py`程序可以查看您的成果。（记得修改打开文件名）
+程序会默认导出`ply`文件，同样您也可以[关闭](https://github.com/HarryXD2018/3DPainter/wiki/Document#interactionpy)自动导出功能。通过运行`view3d.py`程序可以查看您的成果。（记得修改打开文件名）
 
 ![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/3dresult.png)
 
@@ -92,17 +92,4 @@
 
 请查看 [wiki](https://github.com/HarryXD2018/3DPainter/wiki/Document)页面。
 
-### 新特性
 
-[2021/07/27]
-
-- 加入了点、线和长方体绘制功能。
-- 同步画笔在两窗口下的颜色
-
-[2021/07/28]
-
-- 支持 `.ply` 文件的导出
-
-[2021/07/29]
-
-- 加入盖章功能
