@@ -31,7 +31,7 @@ python 3DPainter.py
 - Sphere (Circle)
 - Dot
 - Cuboid
-- **Infinate canvas**
+- **Infinite canvas**
 
 #### Interactions
 While running the program, there will be 3 windows on the screen, 2d, 3d and full canvas real time results respectively. The 3d window is powered by `matplotlib` and it is only a 3d preview of the project. The final result is generated after exiting the program. 
@@ -131,7 +131,7 @@ Please checkout repo's [wiki](https://github.com/HarryXD2018/3DPainter/wiki/Docu
 
 [2021/08/05]
 
-- Infinate canvas! Try in `move` mode!
+- Infinite canvas! Try in `move` mode!
 
 ### TODO
 
