@@ -31,9 +31,10 @@ python 3DPainter.py
 - Sphere (Circle)
 - Dot
 - Cuboid
+- **Infinate canvas**
 
 #### Interactions
-While running the program, there will be 2 windows on the screen, 2d and 3d respectively. The 3d window is powered by `matplotlib` and it is only a 3d preview of the project. The final result is generated after exiting the program. 
+While running the program, there will be 3 windows on the screen, 2d, 3d and full canvas real time results respectively. The 3d window is powered by `matplotlib` and it is only a 3d preview of the project. The final result is generated after exiting the program. 
 
 ##### Brush
 
@@ -71,6 +72,10 @@ Similar to line. Two points are recorded as diagonal points.
 You can add your signature with spider-man gesture in text mode. Signature will be asked at the beginning of execution.
 
 ![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/Signature.png)
+
+##### Move
+
+In move mode, you can create or view any details in the canvas.  You need reach the move panel in the mode with your index finger. 
 
 #### Frameworks
 
@@ -123,6 +128,10 @@ Please checkout repo's [wiki](https://github.com/HarryXD2018/3DPainter/wiki/Docu
 [2021/07/29]
 
 - You can add your signature in text mode!
+
+[2021/08/05]
+
+- Infinate canvas! Try in `move` mode!
 
 ### TODO
 

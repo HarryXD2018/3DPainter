@@ -35,7 +35,7 @@ class handDetctor():
                 # print(id, lm)
                 # 获取手指关节点
                 h, w, c = img.shape
-                cx, cy, cz = int(lm.x*w), int(lm.y*h), int(lm.z*w)
+                cx, cy, cz = int(lm.x * w), int(lm.y * h), int(lm.z * w)
                 lmList.append([id, cx, cy, cz])
                 if draw:
                     cv2.putText(img, str(int(id)), (cx+10, cy+10), cv2.FONT_HERSHEY_PLAIN,

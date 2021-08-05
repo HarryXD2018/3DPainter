@@ -4,8 +4,9 @@ import HandTrackingModule as htm
 import numpy as np
 import random
 from util3d import runtime_init, draw_line, draw_ball, draw_dot, draw_cuboid
-from interaction import switch_mode, opt
+from interaction import switch_mode, opt, img2plain, plain2img, coor3d, plain2abs
 from gen3d import gen3d
+from math import floor
 
 import matplotlib.pyplot as plt
 
@@ -22,6 +23,15 @@ def display_init():
     cv2.putText(panel, "Save", (10, 460), cv2.FONT_HERSHEY_PLAIN, 1, (46, 255, 224), 1)
     cv2.putText(panel, "Exit", (530, 460), cv2.FONT_HERSHEY_PLAIN, 1, (46, 255, 224), 1)
     cv2.putText(panel, draw_mode + " mode", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (46, 255, 224), 1)
+    if draw_mode == 'move':
+        cv2.rectangle(panel, (160, 0), (480, 40), (116, 153, 255), -1)
+        cv2.putText(panel, "L", (200, 20), cv2.FONT_HERSHEY_PLAIN, 1, (46, 255, 224), 1)
+        cv2.putText(panel, "T", (280, 20), cv2.FONT_HERSHEY_PLAIN, 1, (46, 255, 224), 1)
+        cv2.putText(panel, "B", (360, 20), cv2.FONT_HERSHEY_PLAIN, 1, (46, 255, 224), 1)
+        cv2.putText(panel, "R", (440, 20), cv2.FONT_HERSHEY_PLAIN, 1, (46, 255, 224), 1)
+    else:
+        cv2.rectangle(panel, (160, 0), (480, 40), (0, 0, 0), -1)
+
 
 
 def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
@@ -29,10 +39,12 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
     global pre_dot
     global center
     global draw_mode
+    global show_zone
     if event == cv2.EVENT_LBUTTONDOWN:
         if x > 520 and y < 40:
             plain = np.zeros((480, 640, 3), np.uint8)
             plt.cla()
+            show_zone = [0, 0]
             f.write("clear\n")
             pre_dot = (0, 0, 0)
             center = (0, 0, 0)
@@ -48,6 +60,42 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
             cv2.rectangle(img, (0, 440), (120, 480), (0, 0, 0), -1)
 
 
+def move_panel(image, x):
+    global move_timestamp
+    global show_zone, absolute_coor
+    if time.time() - move_timestamp < 0.5:
+        return image
+    move_timestamp = time.time()
+    direction = floor((x - 160) / 80)
+    f.write("move\n")
+    if direction == 1:              # Top
+        absolute_coor[1] -= 50
+        if show_zone[1] == 0:
+            image = cv2.copyMakeBorder(image, 50, 0, 0, 0, cv2.BORDER_CONSTANT, value=(0, 0, 0))
+        else:
+            show_zone[1] -= 50
+
+    elif direction == 2:
+        absolute_coor[1] += 50
+        if show_zone[1] + 480 == image.shape[0]:
+            image = cv2.copyMakeBorder(image, 0, 50, 0, 0, cv2.BORDER_CONSTANT, value=(0, 0, 0))
+        show_zone[1] += 50
+
+    elif direction == 0:
+        absolute_coor[0] -= 50
+        if show_zone[0] == 0:
+            image = cv2.copyMakeBorder(image, 0, 0, 50, 0, cv2.BORDER_CONSTANT, value=(0, 0, 0))
+        else:
+            show_zone[0] -= 50
+
+    elif direction == 3:
+        absolute_coor[0] += 50
+        if show_zone[0] + 640 == image.shape[1]:
+            image = cv2.copyMakeBorder(image, 0, 0, 0, 50, cv2.BORDER_CONSTANT, value=(0, 0, 0))
+        show_zone[0] += 50
+    return image
+
+
 def save_photo():
     now = datetime.datetime.now()
     cv2.imwrite("./output/Image{}.jpg".format(now.strftime("%Y%m%d%H%M%S")), result)
@@ -61,8 +109,10 @@ cap.set(4, hCam)
 
 if __name__ == '__main__':
     # Display function init
-    plain = np.zeros((480, 640, 3), np.uint8)
-    panel = np.zeros((480, 640, 3), np.uint8)
+    plain = np.zeros((480, 640, 3), np.uint8)           # plots
+    panel = np.zeros((480, 640, 3), np.uint8)           # bottoms
+    show_zone = [0, 0]                                  # the display area
+    absolute_coor = [0, 0]                              # the absolute coordinate of the paint
     ax = runtime_init()
 
     # painting init
@@ -70,20 +120,20 @@ if __name__ == '__main__':
     begin_dot = (0, 0, 0)
     center = (0, 0, 0)
     color = (255, 255, 0)
-    draw_mode = 'text'
+    draw_mode = 'cuboid'
     Signature = "H.Chen"
     switch_timestamp = 0
     text_timestamp = 0
     line_timestamp = 0
+    move_timestamp = 0
     radius = 5
 
     # hand detectors
     detector = htm.handDetctor(detectionCon=0.7)
 
-    """
-    opt.view3d = False
+    # opt.preview3d = False
+    # opt.view3d = False
     opt.export3d = False
-    """
 
     with open('trace.txt', 'w') as f:
         while True:
@@ -95,101 +145,123 @@ if __name__ == '__main__':
             if len(lmList) != 0:
                 thumbOpen, firstOpen, secondOpen, thirdOpen, fourthOpen = detector.fingerStatus(lmList)
                 if firstOpen and not secondOpen and not thirdOpen and not fourthOpen:
-                    _, x, y, z = lmList[8]
-                    # cv2.putText(img, "{}".format(z), (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
+                    _, screen_x, screen_y, z = lmList[8]
+                    absolute_x, absolute_y = coor3d((screen_x, screen_y), absolute_coor)
+                    plain_x, plain_y = img2plain(screen_x, screen_y, show_zone)
+                    # Move
+                    if draw_mode == 'move':
+                        if 160 < screen_x < 480 and screen_y < 40:
+                            plain = move_panel(plain, screen_x)
 
                     # Switch Mode
-                    if x < 120 and y < 40 and time.time()-switch_timestamp > 10:
+                    if screen_x < 120 and screen_y < 40 and time.time()-switch_timestamp > 10:
                         switch_timestamp = time.time()
                         draw_mode = switch_mode(draw_mode)
                         pre_dot = (0, 0, 0)
 
                     # Clear Plain
-                    if x > 360 and y < 40:
+                    elif screen_x > 360 and screen_y < 40:
                         plain = np.zeros((480, 640, 3), np.uint8)
                         plt.cla()
                         pre_dot = (0, 0, 0)
                         center = (0, 0, 0)
+                        show_zone = [0, 0]
+                        f.write("clear\n")
+                    else:
+                        if draw_mode == 'brush':
+                            if pre_dot != (0, 0, 0):
+                                cv2.line(plain, (plain_x, plain_y), pre_dot[:2], color, 3)
+                                draw_line(ax, (absolute_x, absolute_y, z),
+                                          plain2abs(pre_dot, coor=absolute_coor, zone=show_zone), color=color)
+                                f.write("b {} {} {}\n".format(absolute_x, absolute_y, z))
+                            pre_dot = (plain_x, plain_y, z)
 
-                    elif draw_mode == 'brush':
-                        if pre_dot != (0, 0, 0):
-                            cv2.line(plain, (x, y), pre_dot[:2], color, 3)
-                            draw_line(ax, (x, y, z), pre_dot, color=color)
-                            f.write("b {} {} {}\n".format(x, y, z))
-                        pre_dot = (x, y, z)
+                        elif draw_mode == 'ball':
+                            if center != (0, 0, 0):
+                                cv2.circle(plain, center=center[:2], color=(0, 255, 255), radius=radius, thickness=3)
+                                draw_ball(ax, plain2abs(center, coor=absolute_coor, zone=show_zone), radius)
+                                str_temp = list(map(str, plain2abs(center, coor=absolute_coor, zone=show_zone)))
+                                str_temp = " ".join(str_temp)
+                                f.write("s " + str_temp + " {}\n".format(radius))
+                                center = (0, 0, 0)
+                                radius = 5
 
-                    elif draw_mode == 'ball':
-                        if center != (0, 0, 0):
-                            cv2.circle(plain, center=center[:2], color=(0, 255, 255), radius=radius, thickness=3)
-                            draw_ball(ax, center, radius)
-                            f.write("s {} {} {} {}\n".format(center[0], center[1], center[2], radius))
-                            center = (0, 0, 0)
-                            radius = 5
+                        elif draw_mode == 'line':
+                            if begin_dot != (0, 0, 0):
+                                cv2.line(img, (screen_x, screen_y),
+                                         plain2img(begin_dot[0], begin_dot[1], show_zone), (205, 0, 255), 3)
 
-                    elif draw_mode == 'line':
-                        if begin_dot != (0, 0, 0):
-                            cv2.line(img, (x, y), begin_dot[:2], (205, 0, 255), 3)
+                        elif draw_mode == 'cuboid':
+                            if begin_dot != (0, 0, 0):
+                                cv2.rectangle(img, (screen_x, screen_y),
+                                              plain2img(begin_dot[0], begin_dot[1], show_zone), (245, 255, 79), 3)
 
-                    elif draw_mode == 'cuboid':
-                        if begin_dot != (0, 0, 0):
-                            cv2.rectangle(img, (x, y), begin_dot[:2], (245, 255, 79), 3)
-
-                    elif draw_mode == 'dot':
-                        pre_dot = (x, y, z)
+                        elif draw_mode == 'dot':
+                            pre_dot = (plain_x, plain_y, z)
 
                 # Eraser
                 if firstOpen and secondOpen and not thirdOpen and not fourthOpen:
-                    _, x, y, z = lmList[8]
-                    cv2.rectangle(plain, (x-15, y-15), (x+15, y+15), (0, 0, 0), -1)
-                    cv2.rectangle(img, (x-15, y-15), (x+15, y+15), (255, 255, 255), -1)
-                    cv2.rectangle(img, (x-15, y-15), (x+15, y+15), (0, 0, 0), 1)
+                    _, screen_x, screen_y, z = lmList[8]
+                    plain_x, plain_y = img2plain(screen_x, screen_y, show_zone)
+                    cv2.rectangle(plain, (plain_x-15, plain_y-15), (plain_x+15, plain_y+15), (0, 0, 0), -1)
+                    cv2.rectangle(img, (screen_x - 15, screen_y - 15), (screen_x + 15, screen_y + 15), (255, 255, 255), -1)
+                    cv2.rectangle(img, (screen_x - 15, screen_y - 15), (screen_x + 15, screen_y + 15), (0, 0, 0), 1)
                     pre_dot = (0, 0, 0)
 
                 if firstOpen and fourthOpen and not secondOpen and not thirdOpen:
                     if draw_mode == 'brush':
                         color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255))
 
+                    # Template, don't draw on img
                     elif draw_mode == 'ball':
-                        center = (x, y, z)
-                        cv2.circle(img, center=center[:2], color=(0, 200, 200), radius=radius, thickness=3)
+                        center = (plain_x, plain_y, z)
+                        cv2.circle(img, center=(screen_x, screen_y), color=(0, 200, 200), radius=radius, thickness=3)
                         if int(time.time()) % 2 == 0:
                             radius += 5
 
                     elif draw_mode == 'dot':
-                        cv2.circle(plain, center=pre_dot[:2], color=(0, 255, 35), radius=2, thickness=-1)
-                        draw_dot(ax, pre_dot[0], pre_dot[1], pre_dot[2])
-                        f.write("d {} {} {}\n".format(pre_dot[0], pre_dot[1], pre_dot[2]))
+                        cv2.circle(plain, center=(plain_x, plain_y), color=(0, 255, 35), radius=2, thickness=-1)
+                        draw_dot(ax, (absolute_x, absolute_y, z))
+                        str_temp = list(map(str, plain2abs(pre_dot, absolute_coor, show_zone)))
+                        f.write("d " + " ".join(str_temp) + " \n")
 
                     elif draw_mode == 'line':
                         if begin_dot == (0, 0, 0):
                             if time.time()-line_timestamp > 2:
-                                begin_dot = (x, y, z)
-                        elif abs(begin_dot[0] - x) + abs(begin_dot[1] - y) > 20:
-                            cv2.line(plain, (x, y), begin_dot[:2], (205, 0, 255), 3)
-                            draw_line(ax, (x, y, z), begin_dot, (205, 0, 255))
-                            f.write("l {} {} {} {} {} {}\n".format(x, y, z, begin_dot[0], begin_dot[1], begin_dot[2]))
+                                begin_dot = (plain_x, plain_y, z)
+                        elif abs(begin_dot[0] - plain_x) + abs(begin_dot[1] - plain_y) > 20:
+                            cv2.line(plain, (plain_x, plain_y), begin_dot[:2], (205, 0, 255), 3)
+                            draw_line(ax, (absolute_x, absolute_y, z),
+                                      plain2abs(begin_dot, absolute_coor, show_zone), (205, 0, 255))
+                            str_temp = list(map(str, plain2abs(begin_dot, absolute_coor, show_zone)))
+                            f.write("l {} {} {} ".format(absolute_x, absolute_y, z) + " ".join(str_temp) + "\n")
                             begin_dot = (0, 0, 0)
                             line_timestamp = time.time()
 
                     elif draw_mode == 'cuboid':
                         if begin_dot == (0, 0, 0):
                             if time.time()-line_timestamp > 2:
-                                begin_dot = (x, y, z)
-                        elif abs(begin_dot[0] - x) + abs(begin_dot[1] - y) > 20:
-                            cv2.rectangle(plain, (x, y), begin_dot[:2], (245, 255, 79), 3)
-                            draw_cuboid(ax, (x, y, z), begin_dot, (245, 255, 79))
-                            f.write("c {} {} {} {} {} {}\n".format(x, y, z, begin_dot[0], begin_dot[1], begin_dot[2]))
+                                begin_dot = (plain_x, plain_y, z)
+                        elif abs(begin_dot[0] - plain_x) + abs(begin_dot[1] - plain_y) > 20:
+                            cv2.rectangle(plain, (plain_x, plain_y), begin_dot[:2], (245, 255, 79), 3)
+                            draw_cuboid(ax, (absolute_x, absolute_y, z),
+                                        plain2abs(begin_dot, absolute_coor, show_zone), (245, 255, 79))
+                            str_temp = list(map(str, plain2abs(begin_dot, absolute_coor, show_zone)))
+                            f.write("c {} {} {} ".format(plain_x, plain_y, z) + " ".join(str_temp) + " \n")
                             begin_dot = (0, 0, 0)
                             line_timestamp = time.time()
                     elif draw_mode == 'text':
                         if time.time()-text_timestamp > 2:
-                            cv2.putText(plain, Signature, (x, y), cv2.FONT_HERSHEY_PLAIN, 3, (102, 248, 255), 1)
-                            f.write("t {} {} {} {}\n".format(x, y, z, Signature))
+                            cv2.putText(plain, Signature, (plain_x, plain_y), cv2.FONT_HERSHEY_PLAIN, 3, (102, 248, 255), 1)
+                            f.write("t {} {} {} {}\n".format(absolute_x, absolute_y, z, Signature))
                             text_timestamp = time.time()
                 if not firstOpen:
                     pre_dot = (0, 0, 0)
                     center = (0, 0, 0)
-            result = cv2.addWeighted(img, 0.7, plain, 0.3, 0)
+
+            temp = plain[show_zone[1]: (show_zone[1]+480), show_zone[0]: (show_zone[0]+640)]
+            cv2.imshow("full view", plain)
+            result = cv2.addWeighted(img, 0.7, temp, 0.3, 0)
             img2gray = cv2.cvtColor(panel, cv2.COLOR_BGR2GRAY)
             ret, mask = cv2.threshold(img2gray, 10, 255, cv2.THRESH_BINARY)
             mask_inv = cv2.bitwise_not(mask)

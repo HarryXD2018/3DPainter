@@ -1,7 +1,4 @@
 import matplotlib.pyplot as plt
-import time
-from mpl_toolkits.mplot3d import Axes3D
-import cv2
 import numpy as np
 from interaction import opt
 
@@ -30,9 +27,9 @@ def draw_ball(ax, center, radius, color='Reds'):
         ax.plot_surface(x, y, z, rstride=1, cstride=1, cmap=color)
 
 
-def draw_dot(ax, x, y, z):
+def draw_dot(ax, pt):
     if opt.preview3d:
-        ax.scatter(x, -y, z, color=(0, 1, 0.14))
+        ax.scatter(pt[0], -pt[1], pt[2], color=(0, 1, 0.14))
 
 
 def draw_cuboid(ax, pt1, pt2, color=(245, 255, 79)):
@@ -55,8 +52,8 @@ def runtime_init():
     if opt.preview3d:
         fig = plt.figure(figsize=(6, 6))
         ax = fig.add_subplot(111, projection='3d')
-        ax.set_xlabel('x axis') #x轴名称
-        ax.set_ylabel('y axis') #y轴名称
+        ax.set_xlabel('screen_x axis') #x轴名称
+        ax.set_ylabel('screen_y axis') #y轴名称
         ax.set_zlabel('z axis')
         ax.view_init(elev=85, azim=-87)
         return ax

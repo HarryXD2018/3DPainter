@@ -12,7 +12,7 @@ def pc_cube(pt1, pt2):
     y = np.linspace(pt1[1], pt2[1])
     z = np.linspace(pt1[2], pt2[2])
 
-    x1, y1= np.meshgrid(x, y)
+    x1, y1 = np.meshgrid(x, y)
     X = x1.ravel()
     Y = y1.ravel()
     face1 = np.c_[X, Y, np.full_like(X, pt1[2])]
@@ -54,15 +54,17 @@ def pc_sphere(center, radius):
 
 def pc_text(pt1, text: str):
     img = np.ones((480, 640, 3), np.uint8)
-    cv2.putText(img, text, (pt1[0], pt1[1]), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 1)
+    cv2.putText(img, text, (100, 100), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 1)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     x, y = np.where(gray == 0)
+    x += pt1[1] - 100
+    y += pt1[0] - 100
     black = np.c_[y, x]
     points = np.zeros((1, 3))
     for i in range(10):
         selected_index = random.sample(range(len(black)), random.randint(int(len(black)/3), int(2*len(black)/3)))
         for j in selected_index:
-            temp = np.append(black[j], i).reshape(1, 3)
+            temp = np.append(black[j], i+pt1[2]).reshape(1, 3)
             points = np.concatenate((points, temp))
     return np.delete(points, 0, axis=0)
 
@@ -89,18 +91,21 @@ def gen3d():
             elif info[0] == "l":        # line
                 points = np.concatenate((points, pc_line(nums[:3], nums[3:])))
                 brush_temp = None
-            elif info[0] == "b":
+            elif info[0] == "b":                    # brush
                 if brush_temp is not None:
                     points = np.concatenate((points, pc_line(nums, brush_temp)))
-                brush_temp = nums
-            elif info[0] == "t":
+                brush_temp = nums             # 3d
+            elif info[0] == "t":                    # text
                 if len(info) == 5:
                     points = np.concatenate((points, pc_text(nums, info[-1])))
                 else:
                     text = " ".join(info[i] for i in range(4, len(info)))
                     points = np.concatenate((points, pc_text(nums, text)))
+                brush_temp = None
             elif info[0] == 'clear':
                 points = np.ones((1, 3))
+            elif info[0] == 'move':
+                brush_temp = None
     points = np.delete(points, 0, axis=0)
     point_cloud = PointCloud()
     point_cloud.points = Vector3dVector(points)
@@ -112,6 +117,7 @@ def gen3d():
 
 
 if __name__ == '__main__':
+    opt.export3d = False
     gen3d()
 
 
