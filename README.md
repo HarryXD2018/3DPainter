@@ -6,7 +6,9 @@ A monocular 3D Painter based on Python, which can export as `ply` file.
 
 ### Installation
 
-You need the following Python packages:
+Check installation [wiki](https://github.com/HarryXD2018/3DPainter/wiki/Installation) for more details. 
+
+Powered by: 
 
 - matplotlib
 - opencv-python
@@ -81,17 +83,17 @@ In move mode, you can create or view any details in the canvas.  You need reach 
 
 There are four bottoms in the `image` window:
 
-**Switch**: The top left one is for switching the painter mode, you can click the bottom with your mouse, or point to it with your index finger. If you use your finger to switch, please note that the bottom will freeze for 5 seconds to make sure that your finger leave that area (to avoid swiching mode frequently). 
+**Switch**: The top left one is for switching the painter mode, you can click the button with your mouse, or point to it with your index finger. If you use your finger to switch, please note that the button will freeze for 5 seconds to make sure that your finger leave that area (to avoid swiching mode frequently). 
 
 ![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/switch_mode.gif)
 
-**Clear**: The top right one is for clearing the plot. It will clear up both 2D and 3D results. Just as the **Switch** bottom, you can click the bottom with your mouse, or point to it with your index finger. 
+**Clear**: The top right one is for clearing the plot. It will clear up both 2D and 3D results. Just as the **Switch** button, you can click the button with your mouse, or point to it with your index finger. 
 
 ![](https://github.com/HarryXD2018/3DPainter/blob/master/demo/clear.gif)
 
 **Save**: Save the `jpg` file of the current window. 
 
-**Exit**: The bottom right one is for exiting the program **without saving your work**. This bottom can only be activated by clicking. The final 3d `ply` file will be saved if variable `GEN3D` is `True`. 
+**Exit**: The button right one is for exiting the program **without saving your work**. This button can only be activated by clicking. The final 3d `ply` file will be saved if variable `GEN3D` is `True`. 
 
 | Interaction | Mouse clicking     | Finger Pointing    |
 | ----------- | ------------------ | ------------------ |
@@ -135,7 +137,7 @@ Please checkout repo's [wiki](https://github.com/HarryXD2018/3DPainter/wiki/Docu
 
 ### TODO
 
-- [x] Save Bottom
+- [x] Save button
 - [x] Switch color in 3d mode
 - [x] More painting modes
 - [ ] Usage demo

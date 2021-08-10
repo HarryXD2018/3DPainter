@@ -71,6 +71,7 @@ def pc_text(pt1, text: str):
 
 def gen3d():
     points = np.zeros((1, 3))
+    color = np.zeros((1, 3))
     brush_temp = None
     with open('trace.txt') as f:
         for index, line in enumerate(f):
@@ -80,35 +81,55 @@ def gen3d():
             except ValueError:
                 nums = list(map(int, info[1:4]))
             if info[0] == "c":          # cuboid
-                points = np.concatenate((points, pc_cube(nums[:3], nums[3:])))
+                append_points = pc_cube(nums[:3], nums[3:])
+                append_color = np.ones(append_points.shape) * np.asarray([0.30, 1, 0.96])
+                points = np.concatenate((points, append_points))
+                color = np.concatenate((color, append_color))
                 brush_temp = None
             elif info[0] == "d":        # dots
-                points = np.concatenate((points, np.asarray(nums).reshape(1, 3)))
+                append_points = np.asarray(nums).reshape(1, 3)
+                points = np.concatenate((points, append_points))
+                color = np.concatenate((color, np.asarray([0.001, 1, 0]).reshape((1, 3))))
                 brush_temp = None
             elif info[0] == "s":        # sphere
-                points = np.concatenate((points, pc_sphere(nums[:3], nums[-1])))
+                append_points = pc_sphere(nums[:3], nums[-1])
+                append_color = np.ones(append_points.shape) * np.asarray([1, 1, 0])
+                points = np.concatenate((points, append_points))
+                color = np.concatenate((color, append_color))
                 brush_temp = None
             elif info[0] == "l":        # line
-                points = np.concatenate((points, pc_line(nums[:3], nums[3:])))
+                append_points = pc_line(nums[:3], nums[3:])
+                append_color = np.ones(append_points.shape) * np.asarray([1, 0, 0.8])
+                points = np.concatenate((points, append_points))
+                color = np.concatenate((color, append_color))
                 brush_temp = None
             elif info[0] == "b":                    # brush
                 if brush_temp is not None:
-                    points = np.concatenate((points, pc_line(nums, brush_temp)))
-                brush_temp = nums             # 3d
+                    append_points = pc_line(nums[:3], brush_temp)
+                    append_color = np.ones(append_points.shape) * (np.asarray(nums[3:]) / 255)
+                    points = np.concatenate((points, append_points))
+                    color = np.concatenate((color, append_color))
+                brush_temp = nums[:3]           # 3d
             elif info[0] == "t":                    # text
                 if len(info) == 5:
-                    points = np.concatenate((points, pc_text(nums, info[-1])))
+                    append_points = pc_text(nums, info[-1])
+                    points = np.concatenate((points, append_points))
                 else:
                     text = " ".join(info[i] for i in range(4, len(info)))
-                    points = np.concatenate((points, pc_text(nums, text)))
+                    append_points = pc_text(nums, text)
+                    points = np.concatenate((points, append_points))
+                append_color = np.ones(append_points.shape) * np.asarray([1, 0.97, 0.4])
+                color = np.concatenate((color, append_color))
                 brush_temp = None
             elif info[0] == 'clear':
                 points = np.ones((1, 3))
             elif info[0] == 'move':
                 brush_temp = None
     points = np.delete(points, 0, axis=0)
+    color = np.delete(color, 0, axis=0)
     point_cloud = PointCloud()
     point_cloud.points = Vector3dVector(points)
+    point_cloud.colors = Vector3dVector(color)
     now = datetime.datetime.now()
     if opt.export3d:
         o3d.io.write_point_cloud('output/{}.ply'.format(now.strftime("%Y%m%d%H%M%S")), point_cloud, True)

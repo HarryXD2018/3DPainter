@@ -33,13 +33,8 @@ def display_init():
         cv2.rectangle(panel, (160, 0), (480, 40), (0, 0, 0), -1)
 
 
-
 def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
-    global plain
-    global pre_dot
-    global center
-    global draw_mode
-    global show_zone
+    global plain, pre_dot, center, draw_mode, show_zone, save_timestamp
     if event == cv2.EVENT_LBUTTONDOWN:
         if x > 520 and y < 40:
             plain = np.zeros((480, 640, 3), np.uint8)
@@ -57,6 +52,7 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
             exit()
         elif x < 120 and y > 440:
             save_photo()
+            save_timestamp = time.time()
             cv2.rectangle(img, (0, 440), (120, 480), (0, 0, 0), -1)
 
 
@@ -126,13 +122,14 @@ if __name__ == '__main__':
     text_timestamp = 0
     line_timestamp = 0
     move_timestamp = 0
+    save_timestamp = 0
     radius = 5
 
     # hand detectors
     detector = htm.handDetctor(detectionCon=0.7)
 
-    # opt.preview3d = False
-    # opt.view3d = False
+    opt.preview3d = False
+    opt.view3d = False
     opt.export3d = False
 
     with open('trace.txt', 'w') as f:
@@ -173,12 +170,13 @@ if __name__ == '__main__':
                                 cv2.line(plain, (plain_x, plain_y), pre_dot[:2], color, 3)
                                 draw_line(ax, (absolute_x, absolute_y, z),
                                           plain2abs(pre_dot, coor=absolute_coor, zone=show_zone), color=color)
-                                f.write("b {} {} {}\n".format(absolute_x, absolute_y, z))
+                                f.write("b {} {} {} {} {} {}\n".format(absolute_x, absolute_y, z,
+                                                                       color[2], color[1], color[0]))
                             pre_dot = (plain_x, plain_y, z)
 
                         elif draw_mode == 'ball':
                             if center != (0, 0, 0):
-                                cv2.circle(plain, center=center[:2], color=(0, 255, 255), radius=radius, thickness=3)
+                                cv2.circle(plain, center=center[:2], color=(0, 255, 255), radius=radius, thickness=-1)
                                 draw_ball(ax, plain2abs(center, coor=absolute_coor, zone=show_zone), radius)
                                 str_temp = list(map(str, plain2abs(center, coor=absolute_coor, zone=show_zone)))
                                 str_temp = " ".join(str_temp)
@@ -209,6 +207,9 @@ if __name__ == '__main__':
                     pre_dot = (0, 0, 0)
 
                 if firstOpen and fourthOpen and not secondOpen and not thirdOpen:
+                    _, screen_x, screen_y, z = lmList[8]
+                    absolute_x, absolute_y = coor3d((screen_x, screen_y), absolute_coor)
+                    plain_x, plain_y = img2plain(screen_x, screen_y, show_zone)
                     if draw_mode == 'brush':
                         color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255))
 
@@ -243,13 +244,14 @@ if __name__ == '__main__':
                             if time.time()-line_timestamp > 2:
                                 begin_dot = (plain_x, plain_y, z)
                         elif abs(begin_dot[0] - plain_x) + abs(begin_dot[1] - plain_y) > 20:
-                            cv2.rectangle(plain, (plain_x, plain_y), begin_dot[:2], (245, 255, 79), 3)
+                            cv2.rectangle(plain, (plain_x, plain_y), begin_dot[:2], (245, 255, 79), -1)
                             draw_cuboid(ax, (absolute_x, absolute_y, z),
                                         plain2abs(begin_dot, absolute_coor, show_zone), (245, 255, 79))
                             str_temp = list(map(str, plain2abs(begin_dot, absolute_coor, show_zone)))
                             f.write("c {} {} {} ".format(plain_x, plain_y, z) + " ".join(str_temp) + " \n")
                             begin_dot = (0, 0, 0)
                             line_timestamp = time.time()
+
                     elif draw_mode == 'text':
                         if time.time()-text_timestamp > 2:
                             cv2.putText(plain, Signature, (plain_x, plain_y), cv2.FONT_HERSHEY_PLAIN, 3, (102, 248, 255), 1)
@@ -261,6 +263,10 @@ if __name__ == '__main__':
 
             temp = plain[show_zone[1]: (show_zone[1]+480), show_zone[0]: (show_zone[0]+640)]
             cv2.imshow("full view", plain)
+
+            if time.time() - save_timestamp < 0.4:          # camera shooter effect
+                img = cv2.add(img, img)
+
             result = cv2.addWeighted(img, 0.7, temp, 0.3, 0)
             img2gray = cv2.cvtColor(panel, cv2.COLOR_BGR2GRAY)
             ret, mask = cv2.threshold(img2gray, 10, 255, cv2.THRESH_BINARY)
