@@ -81,7 +81,7 @@ In move mode, you can create or view any details in the canvas.  You need reach 
 
 #### Frameworks
 
-There are four bottoms in the `image` window:
+There are four buttons in the `image` window:
 
 **Switch**: The top left one is for switching the painter mode, you can click the button with your mouse, or point to it with your index finger. If you use your finger to switch, please note that the button will freeze for 5 seconds to make sure that your finger leave that area (to avoid swiching mode frequently). 
 
@@ -134,6 +134,11 @@ Please checkout repo's [wiki](https://github.com/HarryXD2018/3DPainter/wiki/Docu
 [2021/08/05]
 
 - Infinite canvas! Try in `move` mode!
+
+[2021/08/10]
+
+- The color of `ply` file will be exported just like in 2d mode. 
+- A camera click special effect. 
 
 ### TODO
 
