@@ -1,11 +1,11 @@
-import time, datetime
+import time
 import cv2
 import HandTrackingModule as htm
 import numpy as np
 import random
 from util3d import runtime_init, draw_line, draw_ball, draw_dot, draw_cuboid
-from interaction import switch_mode, opt, img2plain, plain2img, coor3d, plain2abs
-from gen3d import gen3d
+from interaction import *
+from gen3d import gen3d, trace3d
 from math import floor
 
 import matplotlib.pyplot as plt
@@ -47,8 +47,12 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
             draw_mode = switch_mode(draw_mode)
         elif x > 520 and y > 440:
             f.close()
+            import shutil
+            shutil.copy('trace.txt', './output/{}/trace.txt'.format(project_name))
             if opt.export3d or opt.view3d:
                 gen3d()
+            if opt.view3d_trace:
+                trace3d()
             exit()
         elif x < 120 and y > 440:
             save_photo()
@@ -94,7 +98,7 @@ def move_panel(image, x):
 
 def save_photo():
     now = datetime.datetime.now()
-    cv2.imwrite("./output/Image{}.jpg".format(now.strftime("%Y%m%d%H%M%S")), result)
+    cv2.imwrite("./output/{}/Image{}.jpg".format(project_name, now.strftime("%M_%S")), result)
 
 
 wCam, hCam = 640, 480
@@ -118,21 +122,21 @@ if __name__ == '__main__':
     color = (255, 255, 0)
     draw_mode = 'cuboid'
     Signature = "H.Chen"
-    switch_timestamp = 0
-    text_timestamp = 0
-    line_timestamp = 0
-    move_timestamp = 0
-    save_timestamp = 0
+    save_timestamp, switch_timestamp, text_timestamp, line_timestamp, move_timestamp = 0, 0, 0, 0, 0
     radius = 5
 
     # hand detectors
     detector = htm.handDetctor(detectionCon=0.7)
 
-    opt.preview3d = False
-    opt.view3d = False
-    opt.export3d = False
+    project_name = project_init()
+
+    # Options
+    # opt.preview3d = False
+    # opt.view3d = False
+    # opt.export3d = False
 
     with open('trace.txt', 'w') as f:
+        f.write(project_name + '\n')          # 1 is meaningless but to make gen works.
         while True:
             success, img = cap.read()
             img = cv2.flip(img, 1)

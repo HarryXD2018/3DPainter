@@ -103,9 +103,11 @@ There are four buttons in the `image` window:
 | Exit        | :heavy_check_mark: | :x:                |
 
 #### Display options
-There are 3 boolean variables: `opt.preview3d`, `opt.view3d` and `opt.export3d` namely. They respectively in charge of:
+There are 5 variables: `opt.preview3d`, `opt.view3d`, `opt.view3d_trace`, `opt.color` and `opt.export3d` namely. They respectively in charge of:
 - matplotlib 3d preview while running the program,
 - the point cloud result after running,
+- the trace during painting
+- the color of exported `ply` file (`rainbow` or `default`)
 - if the point cloud result export to `ply` file. 
 
 You can view the file by running `view3d.py`. (Please change the file name)
@@ -139,6 +141,8 @@ Please checkout repo's [wiki](https://github.com/HarryXD2018/3DPainter/wiki/Docu
 
 - The color of `ply` file will be exported just like in 2d mode. 
 - A camera click special effect. 
+- Upgrade file system
+- Add trace view function. 
 
 ### TODO
 
