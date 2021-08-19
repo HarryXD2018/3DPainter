@@ -27,7 +27,11 @@ def coor3d(pt, coor):
 def project_init():
     now = datetime.datetime.now()
     project_name = "Project_" + now.strftime("%m_%d_%H_%M")
-    os.mkdir('./output/'+project_name)
+    try:
+        os.mkdir('./output/'+project_name)
+    except FileExistsError:
+        project_name = project_name + '(1)'
+        os.mkdir('./output/'+project_name)
     return project_name
 
 

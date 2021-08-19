@@ -9,7 +9,7 @@
 
 ### 教程
 
-运行`python 3DPainter.py`
+运行`python Painter.py`
 
 
 目前3D Painter支持如下画图功能：
@@ -23,6 +23,10 @@
 
 #### 交互
 在程序运行期间，屏幕上会显示三个窗口，分别显示实时的二维和三维画面，以及整个画布的结果。实时的三维画面是基于`matplotlib`，而最终导出的三维文件是程序结束后生成的。为了提高实时性能，您可以将实时三维画面[关闭](https://github.com/HarryXD2018/3DPainter/wiki/Document#interactionpy)。
+
+##### 语音交互
+
+基于微软Azure的语音交互服务，使用教程请参考[链接](https://github.com/HarryXD2018/3DPainter/wiki/Installation#voice-control-service)。
 
 ##### 画笔
 

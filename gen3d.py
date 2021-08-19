@@ -186,8 +186,9 @@ if __name__ == '__main__':
     # opt.export3d = True
     # opt.pc_color = 'default'
     # print(sys.argv)
-    if len(sys.argv) == 2:
-        trace3d(sys.argv[1])
+    gen3d()
+    # if len(sys.argv) == 2:
+    #     trace3d(sys.argv[1])
 
 
 

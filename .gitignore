@@ -1,4 +1,6 @@
 /output/
 /venv/
 /dist/
+/doc/
 icon.ico
+azure_key.txt

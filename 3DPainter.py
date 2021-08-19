@@ -284,4 +284,3 @@ if __name__ == '__main__':
             if cv2.waitKey(2) & 0xFF == 27:
                 plt.ioff()
                 break
-

@@ -24,7 +24,7 @@ Or run `pip install -r requirements.txt` in your command line.
 Run
 
 ~~~ cmd
-python 3DPainter.py
+python Painter.py
 ~~~
 
 3D Painter supports following modes:
@@ -37,6 +37,10 @@ python 3DPainter.py
 
 #### Interactions
 While running the program, there will be 3 windows on the screen, 2d, 3d and full canvas real time results respectively. The 3d window is powered by `matplotlib` and it is only a 3d preview of the project. The final result is generated after exiting the program. 
+
+##### Voice Control
+
+The voice control function is powered by Microsoft Azure services. To enable voice control service, please check out [voice control wiki](https://github.com/HarryXD2018/3DPainter/wiki/Installation#voice-control-service). 
 
 ##### Brush
 
@@ -143,6 +147,10 @@ Please checkout repo's [wiki](https://github.com/HarryXD2018/3DPainter/wiki/Docu
 - A camera click special effect. 
 - Upgrade file system
 - Add trace view function. 
+
+[2021/08/19]
+
+- Voice control available
 
 ### TODO
 
